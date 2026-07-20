@@ -41,8 +41,16 @@ WebOS is an ongoing project. New features, improvements, and additional applicat
 
 ## License
 
+This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** license.
+
+You are free to share and adapt this project for **non-commercial purposes**, provided that you:
+- Give appropriate credit.
+- Include a link to the license.
+- Indicate if changes were made.
+
+Commercial use is **not permitted** without prior permission.
+
+For the full license, see the [LICENSE](LICENSE) file or visit:
+https://creativecommons.org/licenses/by-nc/4.0/
+
 Copyright © 2026 Chahatesh
-
-All Rights Reserved.
-
-This project and its source code may not be copied, modified, redistributed, published, or used to create derivative works without prior written permission from the copyright holder.
