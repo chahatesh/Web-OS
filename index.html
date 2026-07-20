@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robo-OS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-left" id="welcomeopen">Robo-OS</div>
+    <div class="topbar-right" id="timeElement">00:00:00</div>
+  </div>
+
+  <div class="taskbar">
+    <div class="taskbar-items" id="taskbarItems"></div>
+  </div>
+
+  <div class="sidebar">
+    <div class="app-icon" id="projectsicon" title="Projects">
+      <img src="./projects.webp" alt="Projects">
+    </div>
+    <div class="app-icon" id="calculatoricon" title="Calculator">
+      <img src="./calculator.png" alt="Calculator">
+    </div>
+    <div class="app-icon" id="browsericon" title="Browser">
+      <img src="./browser.webp" alt="Browser">
+    </div>
+  </div>
+
+  <div id="welcome" class="window">
+    <div class="windowheader" id="welcomeheader">
+      <div class="window-controls">
+        <button class="control-btn close-btn" onclick="closeWindow('welcome')"></button>
+        <button class="control-btn minimize-btn" onclick="minimizeWindow('welcome')"></button>
+        <button class="control-btn maximize-btn" onclick="maximizeWindow('welcome')"></button>
+      </div>
+      <p class="headertext">Welcome to Robo-OS</p>
+      <div class="header-spacer"></div>
+    </div>
+    <div class="window-content">
+      <div class="robot-icon"><img src="./robotface.png" alt="Robot Face"></div>
+      <h1>Robo-OS</h1>
+      <h2>A Robot Operating System</h2>
+      <p>Hello world! Welcome to the future of robotics control and automation.</p>
+      <div class="divider"></div>
+      <a href="https://www.youtube.com/@CKInnovates" class="cta-button">Visit Channel</a>
+    </div>
+  </div>
+
+  <div id="projectsapp" class="window">
+    <div class="windowheader" id="projectsappheader">
+      <div class="window-controls">
+        <button class="control-btn close-btn" onclick="closeWindow('projectsapp')"></button>
+        <button class="control-btn minimize-btn" onclick="minimizeWindow('projectsapp')"></button>
+        <button class="control-btn maximize-btn" onclick="maximizeWindow('projectsapp')"></button>
+      </div>
+      <p class="headertext">Projects</p>
+      <div class="header-spacer"></div>
+    </div>
+    <div class="window-content">
+      <div class="projects-grid" id="projectsGrid"></div>
+    </div>
+  </div>
+
+  <div id="calculatorapp" class="window">
+    <div class="windowheader" id="calculatorappheader">
+      <div class="window-controls">
+        <button class="control-btn close-btn" onclick="closeWindow('calculatorapp')"></button>
+        <button class="control-btn minimize-btn" onclick="minimizeWindow('calculatorapp')"></button>
+        <button class="control-btn maximize-btn" onclick="maximizeWindow('calculatorapp')"></button>
+      </div>
+      <p class="headertext">Calculator</p>
+      <div class="header-spacer"></div>
+    </div>
+    <div class="window-content calculator-content">
+      <input type="text" id="calcDisplay" class="calc-display" readonly>
+      <div class="calc-grid">
+        <button class="calc-btn" onclick="appendCalc('7')">7</button>
+        <button class="calc-btn" onclick="appendCalc('8')">8</button>
+        <button class="calc-btn" onclick="appendCalc('9')">9</button>
+        <button class="calc-btn calc-op" onclick="appendCalc('/')">/</button>
+
+        <button class="calc-btn" onclick="appendCalc('4')">4</button>
+        <button class="calc-btn" onclick="appendCalc('5')">5</button>
+        <button class="calc-btn" onclick="appendCalc('6')">6</button>
+        <button class="calc-btn calc-op" onclick="appendCalc('*')">*</button>
+
+        <button class="calc-btn" onclick="appendCalc('1')">1</button>
+        <button class="calc-btn" onclick="appendCalc('2')">2</button>
+        <button class="calc-btn" onclick="appendCalc('3')">3</button>
+        <button class="calc-btn calc-op" onclick="appendCalc('-')">-</button>
+
+        <button class="calc-btn" onclick="appendCalc('0')">0</button>
+        <button class="calc-btn" onclick="appendCalc('.')">.</button>
+        <button class="calc-btn calc-equals" onclick="calculateResult()">=</button>
+        <button class="calc-btn calc-op" onclick="appendCalc('+')">+</button>
+      </div>
+      <button class="calc-btn calc-clear" onclick="clearCalc()">Clear</button>
+    </div>
+  </div>
+
+  <div id="browserapp" class="window">
+    <div class="windowheader" id="browserappheader">
+      <div class="window-controls">
+        <button class="control-btn close-btn" onclick="closeWindow('browserapp')"></button>
+        <button class="control-btn minimize-btn" onclick="minimizeWindow('browserapp')"></button>
+        <button class="control-btn maximize-btn" onclick="maximizeWindow('browserapp')"></button>
+      </div>
+      <p class="headertext">Browser</p>
+      <div class="header-spacer"></div>
+    </div>
+    <div class="window-content browser-content">
+      <div class="browser-input-group">
+        <input type="text" id="urlInput" class="browser-input" placeholder="Enter URL (e.g., hackclub.com)" text="https://.hackclub.com">
+        <button class="browser-btn" onclick="loadBrowser()">Go</button>
+      </div>
+      <iframe id="browserFrame" class="browser-frame" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
