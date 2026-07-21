@@ -5,6 +5,10 @@ const apps = [
   { id: "projectsapp", name: "Projects" },
   { id: "calculatorapp", name: "Calc" },
   { id: "browserapp", name: "Browser" },
+  { id: "notesapp", name: "Notes" },
+  { id: "musicapp", name: "Music" },
+  { id: "weatherapp", name: "Weather" },
+  { id: "settingsapp", name: "Settings" },
 ];
 
 function dragElement(el) {
@@ -96,7 +100,7 @@ const projects = [
     id: 1,
     title: "4DOF Robot Arm",
     summary: "4-degree-of-freedom robotic arm with servo control.",
-    icon: "🦾",
+    icon: "",
     color: "#FF6B6B",
     description: `
       <h4>4DOF Robot Arm</h4>
@@ -119,8 +123,8 @@ const projects = [
   {
     id: 2,
     title: "Auto Locking Turret",
-    summary: "Intelligent turret with automatic target tracking.",
-    icon: "🎯",
+    summary: "A turret with automatic target tracking.",
+    icon: "",
     color: "#4ECDC4",
     description: `
       <h4>Auto Locking Turret</h4>
@@ -217,10 +221,150 @@ document.getElementById("urlInput").addEventListener("keypress", e => {
   if (e.key === "Enter") loadBrowser();
 });
 
+const notesArea = document.getElementById("notesArea");
+const notesStatus = document.getElementById("notesStatus");
+let notesTimer = null;
+
+notesArea.value = localStorage.getItem("robo-os-notes") || "";
+
+notesArea.addEventListener("input", () => {
+  notesStatus.textContent = "Saving";
+  clearTimeout(notesTimer);
+  notesTimer = setTimeout(() => {
+    localStorage.setItem("robo-os-notes", notesArea.value);
+    notesStatus.textContent = "Saved";
+  }, 500);
+});
+
+function clearNotes() {
+  notesArea.value = "";
+  localStorage.removeItem("robo-os-notes");
+  notesStatus.textContent = "saved";
+}
+
+const audio = document.getElementById("audioPlayer");
+const playBtn = document.getElementById("playBtn");
+const progressBar = document.getElementById("progressBar");
+const volumeBar = document.getElementById("volumeBar");
+const currentTimeEl = document.getElementById("currentTime");
+const durationTimeEl = document.getElementById("durationTime");
+
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60).toString().padStart(2, "0");
+  return `${m}:${s}`;
+}
+
+function togglePlay() {
+  if (audio.paused) {
+    audio.play();
+    playBtn.textContent = "⏸";
+  } else {
+    audio.pause();
+    playBtn.textContent = "▶";
+  }
+}
+
+function skipForward() {
+  audio.currentTime = Math.min(audio.currentTime + 10, audio.duration || 0);
+}
+
+function skipBack() {
+  audio.currentTime = Math.max(audio.currentTime - 10, 0);
+}
+
+audio.addEventListener("loadedmetadata", () => {
+  durationTimeEl.textContent = formatTime(audio.duration);
+});
+
+audio.addEventListener("timeupdate", () => {
+  currentTimeEl.textContent = formatTime(audio.currentTime);
+  if (audio.duration) progressBar.value = (audio.currentTime / audio.duration) * 100;
+});
+
+audio.addEventListener("ended", () => {
+  playBtn.textContent = "";
+});
+
+progressBar.addEventListener("input", () => {
+  if (audio.duration) audio.currentTime = (progressBar.value / 100) * audio.duration;
+});
+
+volumeBar.addEventListener("input", () => {
+  audio.volume = volumeBar.value / 100;
+});
+
+audio.volume = 0.8;
+
+async function loadWeather() {
+  const city = document.getElementById("cityInput").value.trim();
+  const resultBox = document.getElementById("weatherResult");
+  if (!city) return;
+
+  resultBox.innerHTML = `<p class="weather-placeholder">Loading...</p>`;
+
+  try {
+    const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1`);
+    const geoData = await geoRes.json();
+
+    if (!geoData.results || geoData.results.length === 0) {
+      resultBox.innerHTML = `<p class="weather-placeholder">City not found.</p>`;
+      return;
+    }
+
+    const { latitude, longitude, name, country } = geoData.results[0];
+    const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code`);
+    const weatherData = await weatherRes.json();
+    const current = weatherData.current;
+
+    const codeMap = {
+      0: "Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
+      45: "Fog", 48: "Fog", 51: "Light drizzle", 61: "Light rain", 63: "Rain",
+      65: "Heavy rain", 71: "Snow", 73: "Snow", 75: "Heavy snow",
+      80: "Rain showers", 95: "Thunderstorm",
+    };
+    const desc = codeMap[current.weather_code] || "Unknown";
+
+    resultBox.innerHTML = `
+      <div class="weather-city">${name}, ${country}</div>
+      <div class="weather-temp">${Math.round(current.temperature_2m)}°C</div>
+      <div class="weather-desc">${desc}</div>
+      <div class="weather-details">
+        <span> ${current.relative_humidity_2m}%</span>
+        <span> ${Math.round(current.wind_speed_10m)} km/h</span>
+      </div>
+    `;
+  } catch (err) {
+    resultBox.innerHTML = `<p class="weather-placeholder">Could not load weather.</p>`;
+  }
+}
+
+document.getElementById("cityInput").addEventListener("keypress", e => {
+  if (e.key === "Enter") loadWeather();
+});
+
+function setAccent(main, dark) {
+  document.documentElement.style.setProperty("--accent", main);
+  document.querySelectorAll(".topbar, .windowheader").forEach(el => {
+    el.style.background = `linear-gradient(90deg, ${dark}, ${main})`;
+  });
+  document.querySelectorAll(".cta-button, .project-btn, .calc-equals, .browser-btn, .modal-close, .taskbar-item").forEach(el => {
+    el.style.background = `linear-gradient(135deg, ${main}, ${dark})`;
+  });
+}
+
+function toggleDarkMode() {
+  document.body.classList.toggle("dark-mode");
+}
+
 document.getElementById("welcomeopen").addEventListener("click", () => openApp("welcome"));
 document.getElementById("projectsicon").addEventListener("click", () => openApp("projectsapp"));
 document.getElementById("calculatoricon").addEventListener("click", () => openApp("calculatorapp"));
 document.getElementById("browsericon").addEventListener("click", () => openApp("browserapp"));
+document.getElementById("notesicon").addEventListener("click", () => openApp("notesapp"));
+document.getElementById("musicicon").addEventListener("click", () => openApp("musicapp"));
+document.getElementById("weathericon").addEventListener("click", () => openApp("weatherapp"));
+document.getElementById("settingsicon").addEventListener("click", () => openApp("settingsapp"));
 
 apps.forEach(app => dragElement(document.getElementById(app.id)));
 
