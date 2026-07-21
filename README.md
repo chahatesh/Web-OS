@@ -16,6 +16,21 @@ A simple calculator for everyday calculations.
 
 A built-in browser that allows you to visit websites and search the web without leaving WebOS.
 
+### Notes
+
+A simple notes app for creating and saving text notes inside WebOS.
+
+### Music
+
+A music player app that lets you play songs inside WebOS. It includes "Life Goes On" by Oliver Tree as the featured song.
+
+### Settings
+
+A settings app for managing WebOS options and customization.
+
+### Weather
+
+A weather app that displays weather information inside the WebOS environment.
 ### Interface
 
 * Desktop-style layout
@@ -32,9 +47,12 @@ I wanted to see how much of a desktop operating system I could recreate using on
 * Projects
 * Calculator
 * Browser
+* Notes
+* Music
+* Settings
+* Weather
 
 More applications will be added in future updates:)
-
 ## Development
 
 WebOS is an ongoing project. New features, improvements, and additional applications are added over time as the project evolves.
